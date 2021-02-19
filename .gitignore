@@ -1,0 +1,9 @@
+# Project exclude paths
+/Monads/Options/task 1/project/target/
+/Monads/Options/task 1/target/
+/Monads/Options/task 1/target/scala-2.12/test-classes/
+/Monads/Theory/theory/project/target/
+/Monads/Theory/theory/target/
+/Monads/Theory/theory/target/scala-2.12/classes/
+/project/target/
+/target/

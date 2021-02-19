@@ -1,0 +1,11 @@
+title: Simon's Scala exercises
+language: English
+summary: |+
+  A course designed to go through the rudiments of working with Scala and some common gotchas that often catch people out.
+
+  Created: Jan 29, 2021 by Simon Adams
+
+programming_language: Scala
+environment: sbt
+content:
+- Monads

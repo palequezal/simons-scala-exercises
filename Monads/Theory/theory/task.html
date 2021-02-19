@@ -1,0 +1,84 @@
+<html>
+
+    <h1>Definition: What is a Monad?</h1>
+    <p>
+        The term "Monad" comes from Category Theory and is often confusing/opaque to new Scala developers as it's something you hear
+        mentioned a lot but unless you come from a mathematical background are likely to not be familiar with.
+    </p>
+
+    <h2>The programmer's perspective</h2>
+    <p>
+        Simply speaking, in coding, a Monad is one of many possible design patterns that can be used to abstract away common functionality
+        so that we can (amongst other things):
+    </p>
+
+
+
+    <ul>
+        <li>make better reasoning about the code simply from reading it</li>
+        <li>enforce at compile time certain rules that ensure our data is not handled in unexpected ways</li>
+        <li>reduce silly bugs in our code (though of course not eliminating the chance of bugs entirely)</li>
+    </ul>
+
+    <p>A great example of this is the Maybe monad, which in Scala is called <strong>Option</strong>.</p>
+
+    <p>Imagine you're writing a method for a chip shop order app to create fish and chips. You need some sort of
+        Fish and some Chips to make an order, so you need to check that both parameters have been provided.
+        <a href="psi_element://Main#prepareOrder">Traditionally you might do something like this</a>:
+    </p>
+    <br>
+
+    <pre>
+        <code>
+            def prepareOrder(fish: Fish, chips: Chips): FishAndChips = {
+                if (fish == null) null
+                else if (chips == null) null
+                else FishAndChips(Fish, Chips)
+            }
+        </code>
+    </pre>
+
+    <p>Crap, isn't it... Why? Well...</p>
+    <ul>
+        <li>the method can return null as well as FishAndChips but we can't tell that from the method signature</li>
+        <li>every parameter that can be null has to have a null check which clutters the code</li>
+        <li>the sentence "I have null fish" makes no sense, so the data is nonsensical</li>
+    </ul>
+
+    <p>
+        So...
+        <ul>
+            <li>we have a piece of common functionality that we want to abstract away; a null check</li>
+            <li>we want to reference and reinforce the optional nature of the data in our method signature</li>
+        </ul>
+
+        This is where our Option monad comes in to help.
+    </p>
+
+    <h2>Our method, refactored to use Options</h2>
+    <p>
+        <a href="psi_element://Main#prepareOrderImproved">Take a look at the updated method</a>, but don't worry too
+        much about the implementation for now - this will be explained later in a section about some Scala magic called
+        "For comprehensions".
+    </p>
+    <br>
+
+    <h3>Observations</h3>
+
+    <p>The functionality is essentially the same, but note how the null checks have gone.</p>
+    <p>Note also that:</p>
+    <ul>
+        <li>the method parameters are now Option[Fish] and Option[Chips] and the method returns Option[FishAndChips]</li>
+        <li>within the method body I never reference Options at all, but there are no compilation errors</li>
+        <li>IntelliJ (and the Scala compiler) magically knows that the method will return an Option[FishAndChips] despite this</li>
+    </ul>
+    <p>
+        This point references one part of the essential nature of a Monad - that when you perform an operation on the
+        contents of a Monad, the result is also wrapped in a Monad of the <strong>same type</strong>.
+    </p>
+    <p>
+        So therefore looking at the method signature alone, we can deduce that we don't have to provide fish or chips, but that depending on what we provide
+        we may not get FishAndChips. Makes a lot of sense right?
+    </p>
+
+</html>

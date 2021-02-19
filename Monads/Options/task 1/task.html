@@ -1,0 +1,89 @@
+<html>
+
+<h1>Task 1: the "map()" method</h1>
+
+<p>So we have our Option monad that does <code>null</code> checks, but how do we do stuff with our Fish and Chips
+    when they exist?</p>
+
+<p>Enter the <code>map()</code> method. Easy to understand nam, right? Don't worry you'll get it in time.</p>
+<br>
+
+<h2>What does it do?</h2>
+<p>Say you're in your car and you need to get from place A to place B. What would help you get there? A <strong>map</strong>, of course!</p>
+
+<p>So in Monad terms - and it works with any Monad - the <code>map()</code> method allows you to describe <em>how</em>
+    to get from the current contents of the Monad to what you want.</p>
+
+<p>This means you can do lots of magical things to the current contents, you can manipulate it, swap it out for something else
+    or even throw the contents away entirely and replace it with something else.</p>
+
+<p>e.g., say I have an order and I want to swap the type of chips in it, I can do this:</p>
+<br>
+
+<pre>
+    <code>
+        val codAndRegularOrder = Some(FishAndChips(Cod, Regular))
+
+        val result = codAndRegularOrder.map(order => order.copy(chips = Battered))
+    </code>
+</pre>
+
+<p>Ooh, nice! Can you guess what the value of <code>result</code> might be?</p>
+<p>That's right, it's <code>Some(FishAndChips(Cod, Battered))</code>. Don't worry if you didn't get it, I'll explain why...</p>
+
+<p>Let's have a closer look at the above. Between the brackets we have this construction, using a "fat arrow":</p>
+<br>
+
+<code>something => somethingElse</code>
+
+<p>What this defines is a <strong>morphism</strong>, another fancy word for a transition from one category to another.
+    Any <strong>type</strong> in scala is considered a category and we can define methods that describe how to alter one thing into another,
+    though don't forget, the result can be the same type as the original data
+    In fact, if we look at the definition of map for the Option Monad, it's:</p>
+<br>
+
+<code>def map[B](f: A => B): Option[B]</code>
+
+<p>Ooooh it's almost as if I was dropping you hints earlier or something! map accepts a method which takes a value of type A
+    (which here is understood to be the existing contents of the Option) to type B, which it infers from the return type of
+    said method.</p>
+
+<p>For example if I want to throw away the FishAndChips and replace it with a String value that say's "Hello" (for whatever reason)
+    I could provide a method like the below as the parameter for <code>map()</code>:</p>
+<br>
+
+<pre>
+    <code>
+        fishAndChips => "Hello!"
+    </code>
+</pre>
+
+<p>the bit on the left-hand side of the arrow (<code>=></code>) is a reference that refers to the existing contents of the monad. You can call it
+    whatever you want, but make sure it's meaningful (naming things well is half the battle when it comes to code)</p>
+
+<p>On the right-hand side is the method body where we decide what we want to do. Here we throw away the current contents of the
+    monad and replace it with something else, but we could have also used that "<code>fishAndChips</code>" reference
+    to do something with the existing data.</p>
+
+<p>In the above example, because we're not actually using the contents of the monad for anything,
+    by convention we would usually use the <strong>wildcard operator</strong> ( <code>_</code> ) instead of assigning
+    a reference to the existing data to imply that we don't care about it. Awww... e.g.</p>
+<br>
+
+<pre>
+    <code>
+        codAndRegularOrder.map(_ => "Hello!")
+    </code>
+</pre>
+
+<p>Take aways:</p>
+
+<ul>
+    <li><code>map()</code> takes a <strong>method</strong> as a parameter that goes from "A to B" (type A to type B)</li>
+    <li>B need not be different to A</li>
+    <li>type B is inferred from the <strong>return type</strong> of the method</li>
+    <li>the result is ALWAYS wrapped back in a Monad of the same type, which in this case is an Option</li>
+
+</ul>
+
+</html>
