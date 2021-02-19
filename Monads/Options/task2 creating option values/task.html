@@ -1,0 +1,45 @@
+<html>
+
+<h2>Task 2: Creating Option values</h2>
+
+<p>
+    We now have the ability to work with an existing <code>Option</code>, but how would we go about making our own?
+</p>
+
+<p>
+   The <code>Option[T]</code> monad has two sub types in Scala, <code>Some</code> and <code>None</code>
+</p>
+
+<h2>Some</h2>
+<p>
+    <code>Some</code> has the semantic meaning that the value is present. You create a Some value using it's <code>apply()</code> method,
+    which can be done like eihter example below, both are equivalent
+</p>
+<ol>
+    <li><code>Some(???)</code></li>
+    <li><code>Some.apply(???)</code></li>
+</ol>
+
+<p>
+    ... Where "???" is whatever you want to put inside the option. The type of the contents will be inferred from whatever you
+    put inside, so <code>Some(1)</code> has the type Option[Int] and <code>Some("Hello")</code> has the type Option[String]
+</p>
+
+<p>
+    By convention we tend to use <code>Some()</code>, rather than <code>Some.apply()</code> because it's more readable, but
+    it's useful to know what's happening under the hood, should you need it at some point. Some point, get it?
+</p>
+
+<h2>Question 5</h2>
+<div class="hint">
+    The only difference here is the use of braces (curly brackets) <code>{ }</code> instead of round brackets <code>( )</code>.
+    Braces define a multi-line block of code, whereas everything must be on one line between round brackets.
+</div>
+
+<h2>Question 9</h2>
+<div class="hint">
+    When you write Option(1), you're actually using syntactic sugar for Option.apply(1)
+</div>
+
+
+</html>
