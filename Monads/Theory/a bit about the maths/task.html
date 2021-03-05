@@ -1,0 +1,134 @@
+<html><h1>A bit about the maths</h1>
+
+<p>This term... Monad... where did it come from and what do we mean when we use it? We've learned a little bit about what you can <em>do</em> with them, but not <em>why</em>.</p>
+
+<p>Monad is a term from Category theory, but to understand it, first let's learn a little about Functors.</p>
+
+<h2>Functors</h2>
+
+<p>You: Oh no, another opaque term! You explain an opaque term with <em>another</em> one?! Are you some sort of sadist or something?</p>
+
+<p>Me: ...</p>
+
+<p>Imagine you try and define a box in code. Let's look at some requirements for a box</p>
+
+<ol>
+    <li>A box can contain something</li>
+    <li>it therefore needs some means to put something inside it</li>
+    <li>unless we're just happy with things being in the box, we need some means of manipulating it's contents</li>
+    <li>we should be able to take out the original contents of the box and replace them with something else</li>
+    <li>the box can be in two basic states; empty or full</li>
+</ol>
+
+<p>So in some Scala code we define a class called <code>Box[A]</code>, where <code>A</code> denotes the type of the contents of our box, which can be anything - even another box - the possibilities are endless!!</p>
+
+<p>Let's define it for real real...</p>
+
+<h2>Box[A]</h2>
+
+<pre>
+    <code>
+        class Box[+A](val contents: A) {
+            def map[A, B](methodToActOnContents: A => B): Box[B] =
+                new Box(methodToActOnContents(contents))
+        }
+
+        object Box {
+            def apply[A](contents: A): Box[A] =
+                new Box(contents)
+        }
+    </code>
+</pre>
+
+<p>To summarise:</p>
+<ul>
+    <li><code>apply()</code> puts something in a box</li>
+    <li><code>map()</code> allows us to alter the contents of the box (and returns the result in a new box</li>
+    <li><code>apply()</code> is specified on a companion object so we don't need an instance of a box to use it</li>
+</ul>
+
+<p>What we have created here is a <code>Functor</code>. A functor is a wrapper type that:</p>
+
+<ul>
+    <li>has a means of wrapping a value in it (in our case <code>apply()</code>)</li>
+    <li>a means of manipulating the contents, which returns a new wrapped value</li>
+    <li>defines the context and method by which the contents can be operated on</li>
+</ul>
+
+<h2>Adding context to <code>Box[A]</code></h2>
+
+<p>As we mentioned earlier, a box can be empty or full, so let's create those as new types that extend Box.</p>
+
+<p>We'll have to make some changes to Box to make this work, so let's re-do it as Box2</p>
+
+<ol>
+    <li>
+        Make Box2 an <code>abstract class</code> because the Empty and Full() types we're going to create will set the contents.
+        <ul>
+            <li>
+                We need to be able to create different instances of it so it can't be a <code>trait</code> or an
+                <code>object</code> (traits can't be instantiated and an object <em>is</em> an instance)
+            </li>
+            <li>We can't provide the contents yet because Full and Empty will have to set them</li>
+            <li>We still need some reference to the contents method so we can pass it into <code>map()</code></li>
+        </ul>
+    </li>
+    <li>add an isEmpty method to see if there is anything in the box</li>
+    <li>
+        Update the allowed types from <code>A</code> to <code>+A</code>, which means we'll allow anything that
+        extends <code>Box2</code> to be equivalent to a <code>Box2</code>. By default Box2, Empty and Full will be considered
+        different types by the compiler
+    </li>
+</ol>
+
+<p>We can then create our Empty and full subtypes</p>
+
+<pre>
+    <code>
+        case class Full[A](contents: A) {
+            val isEmpty = false
+        }
+
+        class EmptyBoxException extends Exception("This box doesn't have any contents because it is empty")
+
+        case object Empty extends Box2[Nothing] {
+            val isEmpty = true
+            def contents = throw new EmptyBoxException
+        }
+    </code>
+</pre>
+
+<p>
+    <em>Now</em>, when you try to <code>map()</code> on a <code>Full()</code>, it will do whatever it is you intend to the contents and
+    return you a <code>Full()</code> back.
+</p>
+
+<p>If you try and <code>map()</code> on an Empty, you can't becaus there's no contents, so it simply returns <code>Empty</code>.</p>
+
+<p>
+    If you're in any way familiar with Scala, you may have noticed that what we've essentially created is a basic form of
+    <code>Option</code>, just using different semantics. But we're not quite at Monads yet. There's just one final step...</p>
+
+<h2>The final step to Monads</h2>
+
+<p>We now have our Box2[A] Functor and we want to make it a monad. So what is a monad? <em>FINALLY?@</em></p>
+
+<p>The answer is simple. A monad is:</p>
+
+<ul>
+    <li>Everything a Functor is</li>
+    <li>plus the ability to combine it with other Monads</li>
+</ul>
+
+<p>
+    In Scala, this means we add one more method called <code>flatMap()</code> which is nearly identical to
+    <code>map()</code>, but only returns B instead of a Box2[B]. This means our manipulation method has to return a Box2[B],
+    which could be... ANOTHER BOX... so you see we can chain them together and do something with all of their combined data.
+</p>
+
+<p>
+    I won't go into any more detail here about <code>flatMap()</code> because I explain it fully in the Options chapter,
+    which I suggest you go check out now!
+</p>
+
+</html>

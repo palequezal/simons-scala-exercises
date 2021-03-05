@@ -1,0 +1,123 @@
+<html>
+
+<h1>Task 5: Folds</h1>
+<p>Ah... <code>fold()</code>... One of those lovely methods that confuse the hell out of new Scala developers - and with good reason - it&#39;s often used in places where something more intuitive could (and should) be used. Let&#39;s have a look at what it does and see why.</p>
+
+<h2>fold()</h2>
+
+<p>If we take a look at the signature for the <code>fold()</code> method, we see that it has two parameter lists; the first is a method called &quot;ifEmpty&quot; and the second is also a method that takes A and returns B:</p>
+<p><code>def fold[B](ifEmpty: =&gt; B)(f: A =&gt; B): B</code></p>
+<p>So essentially what we&#39;re doing is</p>
+<ul>
+    <li>providing a method to act on the contents of the Option if it exists</li>
+    <li>providing a default for when the Option is empty</li>
+</ul>
+
+<p>If you remember from the previous tasks (which you should because of how fantastic they were), this could also be written as <code>map()</code> with a <code>getOrElse()</code>. For example:</p>
+
+<h3>map() and getOrElse() version</h3>
+<pre><code>
+    optFishAndChips
+        .map(_ =&gt; "Thanks for my fish and chips!")
+        .getOrElse("Meany, I'm telling DAD!")
+</code></pre>
+
+<h3 id="fold-version">fold() version</h3>
+<pre><code>
+    optFishAndChips.fold("Meany, I'm telling DAD!")(_ =&gt; "Thanks for my fish and chips!")
+</code></pre>
+
+<p>Personally, I prefer the readability of the former because getOrElse() makes it more explicit that the value provided is a fallback.</p>
+
+<h2>Folds with sequential data</h2>
+
+<p>Folds make more sense in the context of Sequences, Lists, Sets etc, because they contain multiple values which you can then &quot;fold&quot; into a single value via a method that you define. </p>
+<p>In that sense the idiom makes much more sense, but with Options, just use getOrElse - nobody thinks you&#39;re clever by using fold just because it&#39;s possible!</p>
+<p>e.g.</p>
+
+<pre><code>
+    val prices = Seq(1.5, 2.99, 10.00)
+
+    val total = prices.fold(0){ (price1, price2) =&gt;
+      price1 + price2
+    }
+</code></pre>
+
+<p>Even in this case though, it&#39;s ridiculous to use fold because in Scala you can just use the <code>sum()</code>, which is both idiomatic and far more readable:</p>
+
+<pre><code>
+    val prices = Seq(1.5, 2.99, 10.00)
+
+    val total = prices.sum
+</code></pre>
+
+<h2>Folding strings</h2>
+
+<p>OK, Ok, I can see you're hungry for one more example as to why you won't need to use folds. How about making strings?</p>
+
+<p>
+    You could do something like the below... (note: <code>foldLeft()</code> and <code>foldRight()</code> are just
+    convenience methods that fold the data from the left to right, or right to left, respectively)
+</p>
+
+<pre>
+    <code>
+        val optSomething = Some("Hello")
+
+        optSomething.foldRight("Simon")( (left, right) => s"$left right")
+        // would return "Hello Simon"
+
+        optSomething.foldLeft("Simon")( (left, right) => s"left right")
+        /* would return "Simon Hello" because it goes
+        the other way and the 1st parameter list
+        becomes the first value */
+    </code>
+</pre>
+
+<p>Or perhaps, with a Sequence of strings we want to join?</p>
+
+<pre>
+    <code>
+        val seqSomething = Seq("Hello", "Simon")
+        seqSomething.foldRight("")( (left, right) => left + " " + right)
+    </code>
+</pre>
+
+<p>
+    Starts to fall apart here, doesn't it? We have to set the first parameter list value to "" to avoid it messing up
+    our result.
+</p>
+
+<p>
+    You could simplify it a little using <code>reduce()</code> instead...
+</p>
+
+<pre>
+    <code>
+        seqSomething.reduce( (a, b) => s"$a $b" )
+    </code>
+</pre>
+
+<p>
+    ... But again, a more readable example in scala, which I would recomend using is <code>mkString()</code>, which is
+    available on all 'traversable' types (e.g. Seq, List etc).
+</p>
+
+<pre>
+    <code>
+        seqSomething.mkString(" ")
+
+        // or, using infix notation
+
+        seqSomething mkString " "
+    </code>
+</pre>
+
+<p>Much better, no? Same result, much more readable, no <code>fold()</code> nonsense!</p>
+
+<p>
+    Ultimately, I can't stop you using <code>fold()</code>, this is just to give you an overview of how it works and what
+    your alternatives are if you don't want the developers who work on your coode after you've gone to hate you.
+</p>
+
+</html>

@@ -3,37 +3,37 @@ files:
 - name: src/Main.scala
   visible: true
   placeholders:
-  - offset: 101
+  - offset: 156
     length: 7
     placeholder_text: ???
-  - offset: 139
+  - offset: 194
     length: 7
     placeholder_text: ???
-  - offset: 180
+  - offset: 235
     length: 11
     placeholder_text: ???
-  - offset: 225
+  - offset: 280
     length: 9
     placeholder_text: ???
-  - offset: 265
+  - offset: 320
     length: 7
     placeholder_text: ???
-  - offset: 306
+  - offset: 361
     length: 4
     placeholder_text: ???
-  - offset: 344
+  - offset: 399
     length: 4
     placeholder_text: ???
-  - offset: 379
+  - offset: 434
     length: 7
     placeholder_text: ???
-  - offset: 417
+  - offset: 472
     length: 7
     placeholder_text: ???
-  - offset: 456
+  - offset: 511
     length: 4
     placeholder_text: ???
-  - offset: 495
+  - offset: 550
     length: 10
     placeholder_text: ???
 - name: build.sbt

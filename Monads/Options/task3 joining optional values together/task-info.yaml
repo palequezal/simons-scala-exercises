@@ -2,13 +2,7 @@ type: edu
 files:
 - name: src/Task.scala
   visible: true
-  placeholders:
-  - offset: 288
-    length: 76
-    placeholder_text: ???
 - name: test/TestSpec.scala
   visible: false
 - name: build.sbt
   visible: false
-- name: src/FishAndChips.scala
-  visible: true

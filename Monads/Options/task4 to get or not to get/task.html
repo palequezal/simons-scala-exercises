@@ -1,0 +1,41 @@
+<html>
+
+<h1>Task 4: To get, or not to get?</h1>
+
+<p>
+    Let me preface this by saying it's <em>always</em> "not to <code>get()</code>"! <strong>Always!</strong>
+</p>
+
+<p>
+    That requires some explanation...
+</p>
+<br>
+
+<h2>The <code>get()</code> method</h2>
+
+<p>The <code>Option</code> Monad has a devious, sinister, evil method called <code>get()</code> which you should never ever use.</p>
+
+<p>It's purpose is to trick you into thinking it's a good idea, purely because it exists. It is not.</p>
+
+<p>The <code>get()</code> method ignores the fact that an Option is optional and returns you the contents of the Option.</p>
+
+<p>But what, I hear the eagle-eyed amongst you saying, happens if the Option is a None?</p>
+
+<p>It breaks... That's what... Almost as if we weren't using Options at all.</p>
+
+<p>"OK, OK, I get it", I hear you saying, "But what should I use <em>instead</em>?" </p>
+<br>
+
+<h2>The <code>getOrElse()</code> method</h2>
+
+<p>
+    <code>getOrElse()</code> also gives you the contents of the Option, but with one critical difference... It allows you to
+    define a default if the Option doesn't contain anything.
+</p>
+
+<p>
+    This is much safer because with <code>get()</code> you're making some hefty assumptions that the value you've said
+    will be optional will always be there. Seems sort of counter-intuitive, don't you think?
+</p>
+
+</html>

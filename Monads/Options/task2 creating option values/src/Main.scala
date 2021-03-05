@@ -2,6 +2,7 @@ import org.scalatest.MustMatchers
 
 object Main extends MustMatchers {
 
+   // Fill your answers in here to the questions below
    val answer1: Option[Int] = Some(1)
    val answer2: Option[Int] = Some(3)
    val answer3: Option[String] = Some("two")

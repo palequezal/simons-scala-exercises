@@ -1,0 +1,107 @@
+<html>
+
+<h2>Task 1: Embrace the Future, without exception</h2>
+
+<p>Oh, oh my, the puns. By the end of this chapter you'll be <em>rolling around the floor</em> about that one.</p>
+
+<p>Ehem...</p>
+
+<p>So we're now somewhat familiar with Monad theory and how Options work. You should be able to deduce that</p>
+
+<ul>
+    <li>
+        a monad is essentially a wrapper type that contains some data (it's really a Typeclass, but we'll get into
+        those another time)
+    </li>
+    <li>
+        they are usually used in code to abstract away common, "boilerplate" problems and give context about how we
+        expect to have to handle the data
+    </li>
+    <li>they commonly have subtypes that express the state the data is in</li>
+    <li>mapping on the contents of a monad will perform the necessary </li>
+</ul>
+
+<h2>The problem Futures solve</h2>
+
+<p>
+    In the case of <code>Option</code>, the boilerplate problem they solve is performing <code>null</code> checks and
+    the context they give us is that a value may or may not exist. They then have two types, <code>Some()</code> and
+    <code>None</code> which tell us about the end state of the data.
+</p>
+
+<p>
+    A <code>Future</code> deals with the problem of waiting for asynchronous data and the fact that the asynchronous call
+    could fail and never return a value.
+
+<p>
+    If you've not heard the term "asynchronous" before, it essentially means that we
+    won't wait for the code to finish executing, we'll instead stick it on something called the "stack" and let it complete
+    in the background.
+</p>
+
+<p>
+    When it's completed we'll then return the value or say that it failed. This avoids us locking up
+    our system while long complex operations are taking place.
+</p>
+
+<h2>States of a Future</h2>
+
+<p>
+    Just like Option, a Future has a content type - in this case, it's the type of the value we're expecting as a result
+    from the asynchronous operation.
+</p>
+
+<p>
+    The semantics we use with <code>Future[T]</code> are that it can either <em>succeed</em> with the value of type
+    <code>T</code>, or <em>fail</em> by returning an Exception that the system will <code>throw</code>.
+</p>
+
+<p>
+    Two completed Futures that attempt to get a String value could look like this:
+</p>
+
+<pre>
+    <code>
+        // Under the hood this is translated to Future(Success("Hello"))
+        Future.successful("Hello")
+
+        // Under the hood this is translated to Future(Failure(new Exception("Couldn't get the string")))
+        Future.failed(new Exception("Couldn't get the string"))
+
+        // both Success and Failure are from the scala.util package
+    </code>
+</pre>
+
+<h2>Mapping on Futures</h2>
+
+<p>You can <code>map()</code> on Future in the same way that you can for all other Monadic/Functor types.</p>
+
+<p>
+    Just like how <code>map()</code> only runs on an Option if the result is <code>Some()</code>, it will only run on a
+    Future if the Future succeeds.
+</p>
+
+<p>You can use <code>flatMap()</code> to chain futures together too.</p>
+
+<h2>Execution Contexts</h2>
+
+<p>
+    When using Futures, an <code>implicit ExecutionContext</code> needs to be in scope. ExecutionContexts are what are used
+    behind the scenes to execute your Futures, so without one your code won't even compile.
+</p>
+
+<p>
+    For writing tests an ExecutionContext can be imported from <code>scala.concurrent.ExecutionContext.Implicits.global</code>
+    but in your actual production code you should inject an ExecutionContext instance using Dependency Injection at either class
+    or method level.
+</p>
+
+<h2>Some important notes about using Futures</h2>
+
+<ul>
+    <li>Only use Future.successful or Future.failed when you're sure of the outcome (i.e. the code has finished running)</li>
+    <li>for example, don't do this Future.successful(somethingThatWillTakeAges()) - you're saying it's suceeded when it's
+        not finished and this can lock up your code and prevent it from ever finishing</li>
+</ul>
+
+</html>

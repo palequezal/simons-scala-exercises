@@ -12,8 +12,8 @@
 
 <h2>Some</h2>
 <p>
-    <code>Some</code> has the semantic meaning that the value is present. You create a Some value using it's <code>apply()</code> method,
-    which can be done like eihter example below, both are equivalent
+    <code>Some</code> has the semantic meaning that the value is present. You create a <code>Some</code> value using it's <code>apply()</code> method,
+    which can be done like either example below, both are equivalent
 </p>
 <ol>
     <li><code>Some(???)</code></li>
@@ -28,6 +28,13 @@
 <p>
     By convention we tend to use <code>Some()</code>, rather than <code>Some.apply()</code> because it's more readable, but
     it's useful to know what's happening under the hood, should you need it at some point. Some point, get it?
+</p>
+<br>
+
+<h2>None</h2>
+<p>
+    <code>None</code> represents the absence of a value. It doesn't take a type, but None works with any Option as under the
+    hood it's technically <code>Option[Nothing]</code> and <code>Nothing</code> is a subtype of every type.
 </p>
 
 <h2>Question 5</h2>

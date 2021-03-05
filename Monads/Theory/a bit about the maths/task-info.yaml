@@ -1,0 +1,10 @@
+type: theory
+files:
+- name: src/Main.scala
+  visible: true
+- name: build.sbt
+  visible: false
+- name: src/Box.scala
+  visible: true
+- name: src/Box2.scala
+  visible: true

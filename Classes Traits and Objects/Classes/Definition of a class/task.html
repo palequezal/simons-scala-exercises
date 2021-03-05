@@ -1,0 +1,153 @@
+<html>
+<h1>Definition of a "class"</h1>
+
+<p>It's almost tradition at this point to use Animals to illustrate this concept, so let's go with that...</p>
+
+<p>Imagine an animal - any animal - how would you define it?</p>
+
+<p>Well, to begin with, in code we can create a new type that represents an Animal called a <code>class</code>.</p>
+<br>
+
+<pre>
+    <code>
+        class Animal
+    </code>
+</pre>
+
+<p>We can now create what are called <code>instances</code> of the class using the <code>new</code> keyword.</p>
+
+<p>
+    When we say we're creating an "instance" we mean that we're creating something that essentially follows the same
+    "blueprint", but is a separate entity that can have different data. Let's create some instances that represent my cats,
+    as an example.
+</p>
+<br>
+
+<pre>
+    <code>
+        val eric = new Animal
+        val spooky = new Animal
+    </code>
+</pre>
+
+<p>We now have two different instances of Animal, representing my cats, but it's a bit... Vague, isn't it?</p>
+
+<h2>Adding some functionality to Animal</h2>
+
+<p>
+    We can add data and methods to Animal that better describes them and what they can do.
+    You could end up going to incredible depth here, so let's say for our (highly inaccurate) purposes,
+    we're going to say an Animal is something that:
+</p>
+
+<ul>
+    <li>has some number of legs</li>
+    <li>makes a noise</li>
+</ul>
+
+<p>I can think of lots of animals like that, so we'll stick with that for now and cover our topic by means of example.</p>
+<br>
+
+<pre>
+    <code>
+        class Animal(legs: Int, noise: String)
+    </code>
+</pre>
+
+<p>
+    Here we've added something called a "constructor", which allows us to pass parameters into our class that give it different data.
+</p>
+
+<p>
+    The issue here though is that while we're passing some data into our class, we can't actually use it because it's not
+    part of the class, as it's a constructor parameter, it's only used in it's <em>construction</em>. If we don't do anything
+    with it, it just gets thrown away.
+</p>
+<p>This means if you try and call <code>eric.noise</code>, it will say it doesn't exist</p>
+
+<p>
+    To fix this we need to create some properties in the class that we can assign our constructor values to, though Scala
+    has a special syntax for turning constructor parameters into class properties (most commonly called "class members")
+    - you just add <code>val</code> before the parameter and it becomes a field.
+</p>
+<br>
+
+<pre>
+    <code>
+        class Animal(val legs: Int, val noise: String)
+        val eric = new Animal(legs = 4, noise = "Miaow")
+    </code>
+</pre>
+
+<p>Now we can call <code>eric.noise</code> and it will return "Miaow".</p>
+
+<h2>Making different animals - extending classes</h2>
+
+<p>
+    As well as being instantiated, classes can also be <em>extended</em>. This means in our example that we can create
+    new classes that represent specific animals and can have different, animal specific properties and methods, but also
+    share all the same functionality of the base Animal class.
+</p>
+
+<p>For example</p>
+
+<pre>
+    <code>
+        class Animal(val legs: Int, val noise: String)
+
+        class Cat extends Animal(legs = 4, noise = "Miaow) {
+            def scratch: Unit = println("I'm scratching")
+        }
+
+        val spooky = new Cat
+
+        spooky.scratch
+        spooky.legs // should exist and equal 4
+        spooky.noise // should be "Miaow"
+    </code>
+</pre>
+
+<p>
+    Here we've created a <code>Cat</code> class that adds a scratch method. A base animal can't scratch, but a Cat now can,
+    but cat also inherits the <code>legs</code> and <code>noise</code> values too.
+</p>
+
+<p>
+    We might want to be able to describe every animal, based on how many legs it has and the noise it makes. It makes sense
+    to add this to Animal so we can call it on anything that's an Animal or anything that extends it.
+</p>
+
+<p>
+    Note though that although Cat inherits everything that Animal has, it's a one way door and Animal can't access anything
+    specific to Cat.
+</p>
+<br>
+
+<pre>
+    <code>
+        class Animal(val legs: Int, val noise: String) {
+            private val animalName = getClass.getSimpleName
+
+            def describe = println(s"I'm a $animalName, I have $legs legs and I go $noise!")
+        }
+
+        class Cat extends Animal(legs = 4, noise = "Miaow) {
+            def scratch: Unit = println("I'm scratching")
+        }
+
+        val eric = new Cat
+
+        eric.describe // should print out "I'm a Cat, I have 4 legs and I go Miaow!"
+    </code>
+</pre>
+
+<h2>Take aways</h2>
+
+<ul>
+    <li>a class is like a "blueprint" for a data type that has the same properties and methods</li>
+    <li>you can create instances of a class that can all have different data, but follow the same "blueprint"</li>
+    <li>you can create new classes that extend other classes which have their own class-specific properties, plus the
+        properties of the base class</li>
+</ul>
+
+</html>

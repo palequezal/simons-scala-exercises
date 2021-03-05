@@ -1,0 +1,100 @@
+<html>
+
+<h1>Task 3: joining Options together</h1>
+
+<p>
+    We know that the <code>map()</code> method allows us to work with the contents of our Options, but
+    what about when we have multiple options and we want to combine the contents of all of them and do something
+    with all the data, returning the result in a single Option?
+</p>
+
+<p>
+    This defines the critical component of a Monad; that it can be chained together
+    with other monads of the same kind. The fancy term for this is "Monadic composition", if you're interested.
+</p>
+
+<p>
+    In Haskell this method is referred to as <strong>bind</strong>, which makes a lot of sense. In Scala, they opted for
+    the slightly more opaque <code>flatMap()</code>.
+</p>
+
+<p>
+    As you'll see later on however, <code>flatMap()</code> is still a perfectly valid description for what it does, but
+    I personally find bind to be a more useful descriptor.
+</p>
+<br>
+
+<h2>Under the hood</h2>
+
+<p>
+    Let's take a look at Option's definition of <code>flatMap()</code>:
+</p>
+<br>
+
+<pre>
+    <code>
+        def flatMap[B](f: A => Option[B]): Option[B]
+    </code>
+</pre>
+
+<p>
+    Compare this with the definition of <code>map()</code>:
+</p>
+<br>
+
+<pre>
+    <code>
+        def map[B](f: A => B): Option[B]
+    </code>
+</pre>
+
+<p>If you missed it, the essential differences are:</p>
+
+<ul>
+    <li><code>map()</code> takes a method that must return something of type <code>B</code>, then wraps the result in an <code>Option</code> for you</li>
+    <li><code>flatMap()</code> takes a method that must return an <code>Option[B]</code>, but does <em>no such wrapping</em> for you</li>
+</ul>
+
+<p>
+    Through clever whizzy magic, this allows us to nest together great chains of <code>Option</code> Monads as long as at
+    some point an Option is returned.
+</p>
+
+<p>
+    Let's look at an example where we join together 3 options using <code>flatMap()</code> and <code>map()</code>
+</p>
+<br>
+
+<pre>
+    <code>
+        val optInt1 = Some(1)
+        val optInt2 = Some(2)
+        val optInt3 = Some(3)
+
+        val result = optInt1.flatMap { int1 =>
+            optInt2.flatMap { int2 =>
+                optInt3.map { int3 =>
+                    int1 + int2 + int3
+                }
+            }
+        }
+    </code>
+</pre>
+
+<p>
+    Note how the innermost option has used <code>map()</code> instead of <code>flatMap()</code>. Why do you think that is?
+</p>
+
+<p>
+    Got you! I'm sure you didn't start this course to guess, so I'll tell you. Still, it's good to exercise the old
+    grey matter from time to time! If you remember, <code>flatMap()</code> must return an Option[B], but optInt2 is also flat mapped,
+    so that must also return an option. <code>map()</code> wraps the result in an Option for us, so when all methods have ran
+    we're left with an Option[Int] containing the number 6.
+</p>
+
+<p>
+    I like to think of it that when we're flat mapping, we're plucking the contents out of the Option and throwing it away,
+    sort of like a greedy goblin that's stealing the pigeon eggs from a sequence of nests... Or something...
+</p>
+
+</html>
